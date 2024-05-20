@@ -12,7 +12,7 @@ import connectToMongoDB from "./db/connectToMongoDB.js";
 
 import { app, server } from "./socket/socket.js";
 
-const app = express()
+// const app = express()
 dotenv.config();
 
 const __dirname = path.resolve();
@@ -30,7 +30,14 @@ app.use("/api/users", userRoutes);
 //     res.send('Hello World!')
 // })
 
-app.listen(port, () => {
+
+app.use(express.static(path.join(__dirname, "/frontend/dist")));
+
+app.get("*", (req, res) => {
+	res.sendFile(path.join(__dirname, "frontend", "dist", "index.html"));
+});
+
+server.listen(port, () => {
     connectToMongoDB()
     console.log(`Example app listening on port ${port}`)
 })
